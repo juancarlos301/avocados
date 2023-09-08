@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import fetch from 'isomorphic-unfetch'
 
-const Home = () => {
-  const [productList, setProductList] = useState<TProduct[]>([])
+export const getServerSideProps = async () => {
+  const response = await fetch('http://localhost:3000/api/avo')
+  const { data: productList }: TAPIAvoResponse = await response.json()
 
-  useEffect(() => {
-    window
-      .fetch('api/avo')
-      .then((res) => res.json())
-      .then(({ data }) => setProductList(data))
-  }, [])
+  return {
+    props: {
+      productList,
+    },
+  }
+}
+/*export const getStaticProps = async () => {
+  const response = await fetch('http://localhost:3000/api/avo')
+  const { data: productList }: TAPIAvoResponse = await response.json()
+
+  return {
+    props: {
+      productList,
+    },
+  }
+}*/
+const Home = ({ productList }: { productList: TProduct[] }) => {
   return (
     <div>
       <h1>hola soy next</h1>
